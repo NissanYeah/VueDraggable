@@ -1,11 +1,13 @@
 # 說明
 
+
 - 使用套件 [vue.draggable](https://github.com/SortableJS/Vue.Draggable)
 - 原始範例程式碼：https://david-desmaisons.github.io/draggable-example/
 
 
 # 問題說明
 
+- 此為修改官方範例後後的程式碼
 - 在此範例中，可以使用v-model，但在`maltose-frontend`中，無法使用v-model
 
 #Example
