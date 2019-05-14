@@ -7,8 +7,18 @@
     </div>
 
     <div class="col-md-3" v-for="(arr, index) in test" :key="index">
-      <draggable class="list-group" tag="ul" v-model="test[index]" v-bind="dragOptions" >
-        <li class="list-group-item" v-for="(element,key) in test[index]" :key="key">
+      <draggable
+        class="list-group"
+        tag="ul"
+        v-model="test[index]"
+        v-bind="dragOptions"
+        @end="onUpdate"
+      >
+        <li
+          class="list-group-item"
+          v-for="(element, key) in test[index]"
+          :key="key"
+        >
           {{ element.name }}
         </li>
       </draggable>
@@ -32,44 +42,6 @@ export default {
   },
   data() {
     return {
-      DDX: [
-        {
-          disease: {
-            id: 1040,
-            name: "心包炎"
-          },
-          tier: 1,
-          adjustedTier: 1,
-          adjustedOrder: 1
-        },
-        {
-          disease: {
-            id: 2060,
-            name: "急性冠脉综合征"
-          },
-          tier: 1,
-          adjustedTier: 1,
-          adjustedOrder: 1
-        },
-        {
-          disease: {
-            id: 1676,
-            name: "心绞痛"
-          },
-          tier: 2,
-          adjustedTier: 1,
-          adjustedOrder: 1
-        },
-        {
-          disease: {
-            id: 2871,
-            name: "肺梗死"
-          },
-          tier: 2,
-          adjustedTier: 1,
-          adjustedOrder: 1
-        }
-      ],
       test: {
         list1: [
           {
@@ -115,6 +87,7 @@ export default {
       );
     },
     onUpdate() {
+      // 當完成更新後，就自動重新調整adjustedOrder排序還有adjustedTier的組別
       const state = this;
       Object.keys(state.test).forEach(arr => {
         state.test[arr].forEach((item, index) => {
