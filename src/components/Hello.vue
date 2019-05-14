@@ -4,59 +4,26 @@
       <div class="panel-heading">
         <h3 class="panel-title">Sortable control</h3>
       </div>
-      <div class="panel-body">
-        <div class="checkbox">
-          <label><input type="checkbox" v-model="editable">Enable drag and drop</label>
-        </div>
-        <button type="button" class="btn btn-default" @click="orderList">Sort by original order</button>
-      </div>
     </div>
 
-    <div class="col-md-3">
-      <draggable class="list-group" tag="ul" v-model="list" v-bind="dragOptions" :move="onMove" @start="isDragging=true" @end="isDragging=false">
-        <transition-group type="transition" :name="'flip-list'">
-          <li class="list-group-item" v-for="element in list" :key="element.order">
-            <i :class="element.fixed? 'fa fa-anchor' : 'glyphicon glyphicon-pushpin'" @click=" element.fixed=! element.fixed" aria-hidden="true"></i>
-            {{element.name}}
-            <span class="badge">{{element.order}}</span>
-          </li>
-        </transition-group>
+    <div class="col-md-3" v-for="(arr, index) in test" :key="index">
+      <draggable class="list-group" tag="ul" v-model="test[index]" v-bind="dragOptions" >
+        <li class="list-group-item" v-for="(element,key) in test[index]" :key="key">
+          {{ element.name }}
+        </li>
       </draggable>
     </div>
-
-    <div class="col-md-3">
-      <draggable element="span" v-model="list2" v-bind="dragOptions" :move="onMove">
-        <transition-group name="no" class="list-group" tag="ul">
-          <li class="list-group-item" v-for="element in list2" :key="element.order">
-            <i :class="element.fixed? 'fa fa-anchor' : 'glyphicon glyphicon-pushpin'" @click=" element.fixed=! element.fixed" aria-hidden="true"></i>
-            {{element.name}}
-            <span class="badge">{{element.order}}</span>
-          </li>
-        </transition-group>
-      </draggable>
-    </div>
-
     <div class="list-group col-md-3">
-      <pre>{{listString}}</pre>
+      <pre>{{ listString }}</pre>
     </div>
     <div class="list-group col-md-3">
-      <pre>{{list2String}}</pre>
+      <pre>{{ list2String }}</pre>
     </div>
   </div>
 </template>
 
 <script>
 import draggable from "vuedraggable";
-const message = [
-  "vue.draggable",
-  "draggable",
-  "component",
-  "for",
-  "vue.js 2.0",
-  "based",
-  "on",
-  "Sortablejs"
-];
 
 export default {
   name: "hello",
@@ -65,10 +32,70 @@ export default {
   },
   data() {
     return {
-      list: message.map((name, index) => {
-        return { name, order: index + 1, fixed: false };
-      }),
-      list2: [],
+      DDX: [
+        {
+          disease: {
+            id: 1040,
+            name: "心包炎"
+          },
+          tier: 1,
+          adjustedTier: 1,
+          adjustedOrder: 1
+        },
+        {
+          disease: {
+            id: 2060,
+            name: "急性冠脉综合征"
+          },
+          tier: 1,
+          adjustedTier: 1,
+          adjustedOrder: 1
+        },
+        {
+          disease: {
+            id: 1676,
+            name: "心绞痛"
+          },
+          tier: 2,
+          adjustedTier: 1,
+          adjustedOrder: 1
+        },
+        {
+          disease: {
+            id: 2871,
+            name: "肺梗死"
+          },
+          tier: 2,
+          adjustedTier: 1,
+          adjustedOrder: 1
+        }
+      ],
+      test: {
+        list1: [
+          {
+            name: "心包炎",
+            adjustedOrder: 1,
+            adjustedTier: "test1"
+          },
+          {
+            name: "急性冠脉综合征",
+            adjustedOrder: 2,
+            adjustedTier: "test1"
+          }
+        ],
+        list2: [
+          {
+            name: "心绞痛",
+            adjustedOrder: 1,
+            adjustedTier: "test2"
+          },
+          {
+            name: "肺梗死",
+            adjustedOrder: 2,
+            adjustedTier: "test2"
+          }
+        ]
+      },
       editable: true,
       isDragging: false,
       delayedDragging: false
@@ -86,6 +113,15 @@ export default {
       return (
         (!relatedElement || !relatedElement.fixed) && !draggedElement.fixed
       );
+    },
+    onUpdate() {
+      const state = this;
+      Object.keys(state.test).forEach(arr => {
+        state.test[arr].forEach((item, index) => {
+          item.adjustedOrder = index + 1;
+          item.adjustedTier = String(arr);
+        });
+      });
     }
   },
   computed: {
@@ -98,10 +134,10 @@ export default {
       };
     },
     listString() {
-      return JSON.stringify(this.list, null, 2);
+      return JSON.stringify(this.test.list1, null, 2);
     },
     list2String() {
-      return JSON.stringify(this.list2, null, 2);
+      return JSON.stringify(this.test.list2, null, 2);
     }
   },
   watch: {
